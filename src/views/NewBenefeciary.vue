@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <v-container>
+    <v-container class="mt-3">
         <h2>Add New Benefeciary</h2>
         <v-form ref="benefeciaryForm" @submit.prevent="showConfirmDialog">
             <v-row class="mt-5">
@@ -79,23 +79,18 @@
                         @click="closeConfirmDialog">Check
                         again</v-btn>
                     <v-btn color="green" variant="tonal" class="px-3" prepend-icon="mdi-content-save"
-                        @click="submitForm">
-                        <v-progress-circular v-if="validatingBenefeciary" size="20" color="white" label="Loading..."
-                            indeterminate />
-                        <span v-else>Save</span>
+                        @click="submitForm">Save
                     </v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
         <Snackbar ref="snackbarRef" />
-        <LoaderUI :visible="validatingBenefeciary" message="Saving..." />
     </v-container>
 </template>
 
 <script>
 import apiClient from '../axios';
 import Snackbar from '@/components/Snackbar.vue';
-import LoaderUI from '@/components/LoaderUI.vue';
 import { useBenefeciaryStore } from '@/stores/benefeciaryStore';
 
 export default {
@@ -103,7 +98,6 @@ export default {
     name: 'NewBenefeciary',
     components: {
         Snackbar,
-        LoaderUI
     },
     data() {
         return {
@@ -185,9 +179,10 @@ export default {
                 this.showSuccess("New benefeciary successfully saved!");
                 this.$refs.benefeciaryForm.reset();
             } catch (error) {
-                this.validatingBenefeciary = false;
                 this.showError(error);
                 console.error(error);
+            } finally {
+                this.validatingBenefeciary = false;
             }
         },
         async getOptions(endpoint, targetArray, errorMessage) {

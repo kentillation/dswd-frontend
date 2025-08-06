@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <v-container>
+    <v-container class="mt-3">
         <h2>About</h2>
         <v-card class="pa-2 mt-3">
             <v-card-text>

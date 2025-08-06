@@ -23,14 +23,14 @@
             </v-badge> -->
             <v-icon>mdi-bell-outline</v-icon>
           </v-btn>
-          <v-btn @click="toSettings" icon>
-            <v-icon>mdi-account-circle-outline</v-icon>
+          <v-btn class="ms-0" icon>
+            <v-icon @click="toSettings">mdi-account-circle-outline</v-icon>
           </v-btn>
         </v-app-bar>
         <v-navigation-drawer class="h-screen pa-3" v-model="drawer" v-if="showSidebar">
           <v-list density="compact" nav>
             <v-list-subheader size="30">Menu</v-list-subheader>
-            <v-list-item prepend-icon="mdi-account" @click="toAllBenef" class="ps-3">All Benefeciaries</v-list-item>
+            <v-list-item prepend-icon="mdi-account-group-outline" @click="toAllBenef" class="ps-3">All Benefeciaries</v-list-item>
             <v-list-item prepend-icon="mdi-account-cog-outline" @click="toSettings" class="ps-3">Settings</v-list-item>
             <v-list-item prepend-icon="mdi-information-outline" @click="toAbout" class="ps-3">About</v-list-item>
             <v-divider class="mt-4"></v-divider>
