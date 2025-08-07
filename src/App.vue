@@ -34,6 +34,7 @@
             <v-list-item prepend-icon="mdi-account-group-outline" @click="toAllBenef" class="ps-3">All Benefeciaries</v-list-item>
             <v-list-item prepend-icon="mdi-account-cog-outline" @click="toSettings" class="ps-3">Settings</v-list-item>
             <v-list-item prepend-icon="mdi-information-outline" @click="toAbout" class="ps-3">About</v-list-item>
+            <v-list-item prepend-icon="mdi-help-circle-outline" @click="toHelp" class="ps-3">Help</v-list-item>
             <v-divider class="mt-4"></v-divider>
             <v-list-item prepend-icon="mdi-power" v-if="showLogout" @click="authStore.logout"
               class="ps-3 mt-2">Signout</v-list-item>

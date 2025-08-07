@@ -1,13 +1,14 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <v-container>
-        <h3>Help</h3>
+    <v-container class="mt-3">
+        <h2>Help</h2>
         <v-card class="pa-2 mt-3">
             <v-card-text>
-                <v-container class="text-center">
-                    <h2 class="mb-2">POOFSA PH</h2>
+                <v-container class="text-center mb-2">
+                    <h1 style="font-size: 100px;"><v-icon>mdi-help-circle-outline</v-icon></h1>
+                    <h2>DSWD Digital ID System</h2>
                     <p>
-                        Poofsa will provide you with a list of all the available commands and their usage.
+                        DSWD Digital ID System is a Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ad, exercitationem consequuntur perspiciatis maxime magnam aperiam, adipisci mollitia maiores dolore vitae ut deserunt molestias. Molestias, iste sapiente. Culpa, sunt! Esse, error.
                     </p>
                 </v-container>
             </v-card-text>
