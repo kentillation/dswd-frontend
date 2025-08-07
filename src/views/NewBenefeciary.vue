@@ -2,8 +2,9 @@
 <template>
     <v-container class="mt-3">
         <h2>Add New Benefeciary</h2>
+        <v-icon @click="back" class="my-5" title="Back">mdi-arrow-left</v-icon>
         <v-form ref="benefeciaryForm" @submit.prevent="showConfirmDialog">
-            <v-row class="mt-5">
+            <v-row>
                 <v-col cols="12" lg="4" md="4" sm="6" class="pb-0">
                     <v-text-field v-model="firstName" label="First name" :rules="[v => !!v || 'Required']"
                         variant="outlined" placeholder="e.g. Jose" />
@@ -15,6 +16,10 @@
                 <v-col cols="12" lg="4" md="4" sm="6" class="pb-0">
                     <v-text-field v-model="lastName" label="Last name" :rules="[v => !!v || 'Required']"
                         variant="outlined" placeholder="e.g. Rizal" />
+                </v-col>
+                <v-col cols="12" lg="4" md="4" sm="6" class="pb-0">
+                    <v-text-field v-model="benefSuffix" label="Suffix (if applicable)"
+                        variant="outlined" placeholder="e.g. II, III, IV, V, Sr., Jr." />
                 </v-col>
                 <v-col cols="12" lg="4" md="4" sm="6" class="pb-0">
                     <v-autocomplete v-model="benefGender" @click="getbenefGenderOption" label="Gender"
@@ -112,6 +117,7 @@ export default {
             addressLine2: '',
             addressLine3: '',
             contactNumber: '',
+            benefSuffix: '',
             benefGender: null,
             benefBloodType: null,
             benefCategory: null,
@@ -145,6 +151,10 @@ export default {
         },
     },
     methods: {
+        back() {
+            this.$router.go(-1);
+        },
+
         async generateReferenceNumber() {
             const generatedNumber = Math.random().toString().slice(2, 14);
             console.log('Generated Reference Number:', generatedNumber);
@@ -165,7 +175,15 @@ export default {
             try {
                 if (!this.$refs.benefeciaryForm.validate()) return;
                 this.validatingBenefeciary = true;
+                let refNumber = typeof this.newRefNumber === 'function' || typeof this.newRefNumber?.then === 'function'
+                    ? await this.newRefNumber
+                    : this.newRefNumber;
+                if (!refNumber) {
+                    this.showError("Reference number are required.");
+                    return;
+                }
                 const payload = {
+                    reference_number: refNumber,
                     first_name: this.firstName,
                     middle_name: this.middleName,
                     last_name: this.lastName,
@@ -174,6 +192,7 @@ export default {
                     address_line2: this.addressLine2,
                     address_line3: this.addressLine3,
                     contact_number: this.contactNumber,
+                    suffix: this.benefSuffix,
                     gender_id: this.benefGender,
                     bloodtype_id: this.benefBloodType,
                     category_id: this.benefCategory,

@@ -10,7 +10,7 @@ export const useBenefeciaryStore = defineStore('products', {
 
     actions: {
 
-        // Create
+        // Create new benefeciary
         async saveNewBenefStore(benefeciaryData) {
             this.loading = true;
             this.error = null;

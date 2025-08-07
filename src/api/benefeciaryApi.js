@@ -7,7 +7,7 @@ export const BENEFECIARY_API = {
         UPDATE_BENEFECIARY_INFO: '/admin/update-benef',
     },
 
-    // Create
+    // Create new benefeciary
     async saveNewBenefApi(benefeciaryData) {
         try {
             const authToken = localStorage.getItem('auth_token');
@@ -20,6 +20,7 @@ export const BENEFECIARY_API = {
                     'Content-Type': 'application/json'
                 }
             };
+            // Post request for submission
             const response = await apiClient.post(
                 this.ENDPOINTS.SAVE_NEW_BENEFECIARY,
                 benefeciaryData,

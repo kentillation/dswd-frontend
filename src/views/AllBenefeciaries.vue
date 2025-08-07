@@ -39,8 +39,15 @@
 
                     <!--eslint-disable-next-line -->
                     <template v-slot:item.category_label="{ item }">
-                        <v-chip :color="Number(item.category_id) === 1 ? 'green' : Number(item.category_id) === 2 ? 'red' : Number(item.category_id) === 3 ? 'blue' : undefined" size="small" variant="tonal">
+                        <v-chip :color="Number(item.category_id) === 1 ? 'orange' : Number(item.category_id) === 2 ? 'blue' : undefined" size="small" variant="tonal">
                             {{ item.category_label }}
+                        </v-chip>
+                    </template>
+
+                    <!--eslint-disable-next-line -->
+                    <template v-slot:item.benef_status_id="{ item }">
+                        <v-chip :color="Number(item.benef_status_id) === 1 ? 'green' : 'red'" size="small" variant="flat">
+                            {{ item.benef_status_id === 1 ? 'Active' : 'Inactive' }}
                         </v-chip>
                     </template>
 
@@ -94,6 +101,10 @@
                             <v-col cols="12" lg="4" md="4" sm="6" class="pb-0">
                                 <v-text-field v-model="selectedBenef.last_name" label="Last name"
                                     :rules="[v => !!v || 'Required']" variant="outlined" placeholder="e.g. Rizal" />
+                            </v-col>
+                            <v-col cols="12" lg="4" md="4" sm="6" class="pb-0">
+                                <v-text-field v-model="selectedBenef.suffix" label="Suffix"
+                                    :rules="[v => !!v || 'Required']" variant="outlined" placeholder="e.g. II, III, IV, V, Sr., Jr." />
                             </v-col>
                             <v-col cols="12" lg="4" md="4" sm="6" class="pb-0">
                                 <v-autocomplete v-model="selectedBenef.gender_id" label="Gender"
@@ -182,19 +193,23 @@
                                 <h6>Republic of the Philippines</h6>
                                 <h3 style="color: #01a79e">DSWD DIGITAL IDENTIFICATION CARD</h3>
                             </div>
-                            <div class="mt-4 d-flex justify-space-between">
+                            <div class="mt-4">
+                                <h6 class="text-grey"><em>Numero ng ID / ID Number</em></h6>
+                                <h4>{{ this.selectedBenef.reference_number }}</h4>
+                            </div>
+                            <div class="d-flex justify-space-between">
                                 <div class="d-flex">
                                     <!-- <img :src="benefImage" width="150" height="150" alt="Benefeciary Image" class="pa-2"> -->
                                      <h1 style="font-size: 100px; color: #01a79e"><v-icon>mdi-account-circle-outline</v-icon></h1>
                                     <div class="ms-3 d-flex flex-column">
                                         <h6 class="text-grey"><em>Apelyido / Lastname</em></h6>
-                                        <h4>{{ this.lastName }}</h4>
+                                        <h4>{{ this.selectedBenef.last_name }}</h4>
                                         <h6 class="text-grey"><em>Mga Pangalan / Given Names</em></h6>
-                                        <h4>{{ this.firstName }}</h4>
+                                        <h4>{{ this.selectedBenef.first_name }}</h4>
                                         <h6 class="text-grey"><em>Gitnang Apelyido / Middle Name</em></h6>
-                                        <h4>{{ this.middleName }}</h4>
-                                        <h6 class="text-grey"><em>Telepono / Cellphone</em></h6>
-                                        <h4>{{ this.contactNumber }}</h4>
+                                        <h4>{{ this.selectedBenef.middle_name }}</h4>
+                                        <h6 class="text-grey"><em> / Suffix</em></h6>
+                                        <h4>{{ this.selectedBenef.suffix }}</h4>
                                     </div>
                                 </div>
                                 <div>
@@ -202,17 +217,19 @@
                                 </div>
                             </div>
                             <h6 class="text-grey"><em>Tirahan / Address</em></h6>
-                            <h4>{{ this.addressLine1 }}, {{ this.addressLine2 }}, {{ this.addressLine3 }}</h4>
+                            <h4>{{ this.selectedBenef.address_line1 }}, {{ this.selectedBenef.address_line2 }}, {{ this.selectedBenef.address_line3 }}</h4>
                         </v-card>
                         <v-card class="pa-4 bg-grey-lighten-4">
                             <div class="d-flex justify-space-around">
                                 <div class="ms-2 mt-6 d-flex flex-column">
+                                    <h6 class="text-grey"><em>Telepono / Cellphone</em></h6>
+                                        <h4>{{ this.selectedBenef.contact_number }}</h4>
                                     <h6 class="text-grey"><em>Kasarian / Sex</em></h6>
-                                    <h4>{{ this.benefGender }}</h4>
+                                    <h4>{{ this.selectedBenef.gender_label }}</h4>
                                     <h6 class="text-grey"><em>Uri ng dugo / Blood Type</em></h6>
-                                    <h4>{{ this.benefBloodType }}</h4>
+                                    <h4>{{ this.selectedBenef.bloodtype_label }}</h4>
                                     <h6 class="text-grey"><em>Kategorya / Category</em></h6>
-                                    <h4>{{ this.benefCategory }}</h4>
+                                    <h4>{{ this.selectedBenef.category_label }}</h4>
                                 </div>
                                 <div>
                                     <h1 style="font-size: 100px;"><v-icon>mdi-qrcode</v-icon></h1>
@@ -254,12 +271,14 @@ export default {
                 { title: 'Name_of_benefeciary', value: 'display_name', width: '20%' },
                 { title: 'Age', value: 'benef_age', width: '10%' },
                 { title: 'Contact', value: 'contact_number', width: '15%' },
+                { title: 'Status', value: 'benef_status_id', width: '20%' },
                 { title: 'Last_update', value: 'updated_at', width: '20%' },
                 { title: '', value: 'actions', sortable: false, width: '10%' }
             ],
             firstName: '',
             middleName: '',
             lastName: '',
+            benefSuffix: '',
             benefAge: '',
             addressLine1: '',
             addressLine2: '',
@@ -316,6 +335,7 @@ export default {
                 this.selectedBenef.address_line2 &&
                 this.selectedBenef.address_line3 &&
                 this.selectedBenef.contact_number &&
+                this.selectedBenef.suffix &&
                 this.selectedBenef.gender_id &&
                 this.selectedBenef.bloodtype_id &&
                 this.selectedBenef.category_id
@@ -385,6 +405,7 @@ export default {
                     address_line2: this.selectedBenef.address_line2?.trim(),
                     address_line3: this.selectedBenef.address_line3?.trim(),
                     contact_number: this.selectedBenef.contact_number?.trim(),
+                    suffix: this.selectedBenef.suffix?.trim(),
                     gender_id: Number(this.selectedBenef.gender_id),
                     bloodtype_id: Number(this.selectedBenef.bloodtype_id),
                     category_id: Number(this.selectedBenef.category_id),
@@ -399,6 +420,7 @@ export default {
                     address_line2: this.selectedBenef.address_line2?.trim(),
                     address_line3: this.selectedBenef.address_line3?.trim(),
                     contact_number: this.selectedBenef.contact_number?.trim(),
+                    suffix: this.selectedBenef.suffix?.trim(),
                     gender_id: Number(this.selectedBenef.gender_id),
                     bloodtype_id: Number(this.selectedBenef.bloodtype_id),
                     category_id: Number(this.selectedBenef.category_id),
@@ -432,24 +454,29 @@ export default {
         },
 
         viewDialogID(details) {
+            this.benefOption.fetchAllOptions();
+            this.selectedBenef = { ...details };
             this.dialogID = true;
-            this.firstName = details.first_name;
-            this.middleName = details.middle_name;
-            this.lastName = details.last_name;
-            this.benefAge = details.benef_age;
-            this.addressLine1 = details.address_line1;
-            this.addressLine2 = details.address_line2;
-            this.addressLine3 = details.address_line3;
-            this.contactNumber = details.contact_number;
-            this.benefGender = details.gender_label;
-            this.benefBloodType = details.bloodtype_label;
-            this.benefCategory = details.category_label;
+            const gender = this.benefGenderOption.find(g => g.gender_id === Number(details.gender_id));
+            const bloodtype = this.benefBloodTypeOption.find(b => b.bloodtype_id === Number(details.bloodtype_id));
+            const category = this.benefCategoryOption.find(c => c.category_id === Number(details.category_id));
+            return {
+                gender_label: gender?.gender_label,
+                bloodtype_label: bloodtype?.bloodtype_label,
+                category_label: category?.category_label,
+            };
         },
 
         formatallBenef(benef) {
+            let benefSuffix = benef.suffix;
+            if (benefSuffix !== null) {
+                benefSuffix = benef.suffix;
+            } else {
+                benefSuffix = '';
+            }
             return {
                 ...benef,
-                display_name: `${benef.first_name} ${benef.middle_name} ${benef.last_name}` || '',
+                display_name: `${benef.first_name} ${benef.middle_name} ${benef.last_name}  ${benefSuffix}` || '',
                 updated_at: benef.updated_at ? this.formatDateTime(benef.updated_at) : 'N/A',
             };
         },
