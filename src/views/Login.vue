@@ -38,20 +38,20 @@
                     <span class="text-info" style="cursor: pointer;" @click="$router.push('/forgot-password')">Forgot password?</span>
                 </div>
             </v-sheet>
-            <Snackbar ref="snackbarRef" />
+            <Alert ref="alertRef" />
         </v-container>
     </div>
 </template>
 
 <script>
-import Snackbar from '@/components/Snackbar.vue';
+import Alert from '@/components/Alert.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useLoadingStore } from '@/stores/loading';
 import { shallowRef } from 'vue';
 
 export default {
     name: 'LoginPage',
-    components: { Snackbar },
+    components: { Alert },
     setup() {
         const loadingStore = useLoadingStore();
         return {
@@ -102,7 +102,7 @@ export default {
             }
         },
         showError(message) {
-            this.$refs.snackbarRef.showSnackbar(message, "error");
+            this.$refs.alertRef.showSnackbarAlert(message, "error");
         },
     }
 };

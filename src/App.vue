@@ -30,6 +30,7 @@
         <v-navigation-drawer class="h-screen pa-3" v-model="drawer" v-if="showSidebar">
           <v-list density="compact" nav>
             <v-list-subheader size="30">Menu</v-list-subheader>
+            <v-list-item prepend-icon="mdi-home-outline" @click="toHome" class="ps-3">Home</v-list-item>
             <v-list-item prepend-icon="mdi-account-group-outline" @click="toAllBenef" class="ps-3">All Benefeciaries</v-list-item>
             <v-list-item prepend-icon="mdi-account-cog-outline" @click="toSettings" class="ps-3">Settings</v-list-item>
             <v-list-item prepend-icon="mdi-information-outline" @click="toAbout" class="ps-3">About</v-list-item>

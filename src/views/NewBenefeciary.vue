@@ -84,20 +84,20 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <Snackbar ref="snackbarRef" />
+        <Alert ref="alertRef" />
     </v-container>
 </template>
 
 <script>
 import apiClient from '../axios';
-import Snackbar from '@/components/Snackbar.vue';
+import Alert from '@/components/Alert.vue';
 import { useBenefeciaryStore } from '@/stores/benefeciaryStore';
 
 export default {
     // eslint-disable-next-line vue/multi-word-component-names
     name: 'NewBenefeciary',
     components: {
-        Snackbar,
+        Alert,
     },
     data() {
         return {
@@ -150,12 +150,16 @@ export default {
             console.log('Generated Reference Number:', generatedNumber);
             return generatedNumber;
         },
+
         showConfirmDialog() {
             if (this.isFormValid) this.confirmDialog = true;
         },
+
         closeConfirmDialog() {
             this.confirmDialog = false;
         },
+
+        // Create New Benefeciary
         async submitForm() {
             this.confirmDialog = false;
             try {
@@ -185,6 +189,7 @@ export default {
                 this.validatingBenefeciary = false;
             }
         },
+
         async getOptions(endpoint, targetArray, errorMessage) {
             try {
                 const response = await apiClient.get(endpoint, {
@@ -197,20 +202,25 @@ export default {
                 this.$refs.snackbarRef.showSnackbar(errorMessage, 'error');
             }
         },
+
         getbenefGenderOption() {
             this.getOptions('/admin/gender-option', 'benefGenderOption', 'Failed to fetch gender');
         },
+
         getBenefBloodTypeOption() {
             this.getOptions('/admin/blood-type-option', 'benefBloodTypeOption', 'Failed to fetch blood type');
         },
+
         getBenefCategoryOption() {
             this.getOptions('/admin/category-option', 'benefCategoryOption', 'Failed to fetch category');
         },
+
         showError(message) {
-            this.$refs.snackbarRef.showSnackbar(message, "error");
+            this.$refs.alertRef.showSnackbarAlert(message, "error");
         },
+
         showSuccess(message) {
-            this.$refs.snackbarRef.showSnackbar(message, "success");
+            this.$refs.alertRef.showSnackbarAlert(message, "success");
         },
     },
 

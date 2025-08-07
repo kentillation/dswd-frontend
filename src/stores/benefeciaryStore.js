@@ -4,33 +4,13 @@ import { BENEFECIARY_API } from '@/api/benefeciaryApi';
 export const useBenefeciaryStore = defineStore('products', {
     state: () => ({
         allBenefeciaries: [],
-        productAlone: '',
         loading: false,
         error: null
     }),
 
     actions: {
-        async fetchAllBenefStore() {
-            this.loading = true;
-            this.error = null;
-            try {
-                if (!BENEFECIARY_API || typeof BENEFECIARY_API.fetchAllBenefApi !== 'function') {
-                    throw new Error('BENEFECIARY_API service is not properly initialized');
-                }
-                const response = await BENEFECIARY_API.fetchAllBenefApi();
-                if (response && response.status === true) {
-                    this.allBenefeciaries = response.data;
-                } else {
-                    throw new Error('Failed to fetch benefeciaries');
-                }
-            } catch (error) {
-                console.error(error);
-                throw error;
-            } finally {
-                this.loading = false;
-            }
-        },
 
+        // Create
         async saveNewBenefStore(benefeciaryData) {
             this.loading = true;
             this.error = null;
@@ -52,6 +32,29 @@ export const useBenefeciaryStore = defineStore('products', {
             }
         },
 
+        // Read
+        async fetchAllBenefStore() {
+            this.loading = true;
+            this.error = null;
+            try {
+                if (!BENEFECIARY_API || typeof BENEFECIARY_API.fetchAllBenefApi !== 'function') {
+                    throw new Error('BENEFECIARY_API service is not properly initialized');
+                }
+                const response = await BENEFECIARY_API.fetchAllBenefApi();
+                if (response && response.status === true) {
+                    this.allBenefeciaries = response.data;
+                } else {
+                    throw new Error('Failed to fetch benefeciaries');
+                }
+            } catch (error) {
+                console.error(error);
+                throw error;
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        // Update
         async updateBenefInfoStore(benefeciaryData) {
             this.loading = true;
             this.error = null;

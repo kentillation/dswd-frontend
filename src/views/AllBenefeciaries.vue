@@ -172,19 +172,20 @@
                 style="top: -17px; left: -17px; z-index: 10;" icon>
                 <v-icon>mdi-close</v-icon>
             </v-btn>
-            <v-card class="bg-grey-lighten-3">
+            <v-card class="bg-grey-lighten-1">
                 <v-card-title class="ms-2">Benefeciary Digital ID</v-card-title>
                 <v-card-text>
                     <v-container>
-                        <v-card class="mb-3 pa-4">
+                        <v-card class="mb-3 pa-4 bg-grey-lighten-4">
                             <div class="text-center d-flex flex-column">
                                 <h4>REPUBLIKA NG PILIPINAS</h4>
                                 <h6>Republic of the Philippines</h6>
-                                <h3>DSWD DIGITAL IDENTIFICATION CARD</h3>
+                                <h3 style="color: #01a79e">DSWD DIGITAL IDENTIFICATION CARD</h3>
                             </div>
                             <div class="mt-4 d-flex justify-space-between">
                                 <div class="d-flex">
-                                    <img :src="benefImage" width="150" height="150" alt="Benefeciary Image" class="border rounded pa-2">
+                                    <!-- <img :src="benefImage" width="150" height="150" alt="Benefeciary Image" class="pa-2"> -->
+                                     <h1 style="font-size: 100px; color: #01a79e"><v-icon>mdi-account-circle-outline</v-icon></h1>
                                     <div class="ms-3 d-flex flex-column">
                                         <h6 class="text-grey"><em>Apelyido / Lastname</em></h6>
                                         <h4>{{ this.lastName }}</h4>
@@ -197,15 +198,13 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <v-card class="border">
-                                        <h1 style="font-size: 100px;"><v-icon>mdi-qrcode</v-icon></h1>
-                                    </v-card>
+                                    <h1 style="font-size: 100px;"><v-icon>mdi-qrcode</v-icon></h1>
                                 </div>
                             </div>
                             <h6 class="text-grey"><em>Tirahan / Address</em></h6>
                             <h4>{{ this.addressLine1 }}, {{ this.addressLine2 }}, {{ this.addressLine3 }}</h4>
                         </v-card>
-                        <v-card class="pa-4">
+                        <v-card class="pa-4 bg-grey-lighten-4">
                             <div class="d-flex justify-space-around">
                                 <div class="ms-2 mt-6 d-flex flex-column">
                                     <h6 class="text-grey"><em>Kasarian / Sex</em></h6>
@@ -216,9 +215,7 @@
                                     <h4>{{ this.benefCategory }}</h4>
                                 </div>
                                 <div>
-                                    <v-card>
-                                        <h1 style="font-size: 100px;"><v-icon>mdi-qrcode</v-icon></h1>
-                                    </v-card>
+                                    <h1 style="font-size: 100px;"><v-icon>mdi-qrcode</v-icon></h1>
                                 </div>
                             </div>
                         </v-card>
@@ -330,6 +327,7 @@ export default {
             this.$router.push('/new-benefeciary');
         },
 
+        // Read all benefeciary
         async fetchAllBenef() {
             this.loadingAllBenef = true;
             this.loadingStore.show('');
@@ -365,6 +363,7 @@ export default {
             };
         },
 
+        // Update benefeciary
         async confirmUpdateBenef() {
             this.confirmDialog = false;
             this.dialogInfo = false;

@@ -2,45 +2,12 @@ import apiClient from '../axios';
 
 export const BENEFECIARY_API = {
     ENDPOINTS: {
-        FETCH_ALL_BENEFECIARIES: '/admin/all-benefeciaries',
         SAVE_NEW_BENEFECIARY: '/admin/save-new-benefeciary',
-        UPDATE_BENEF_INFO: '/admin/update-benef',
+        FETCH_ALL_BENEFECIARIES: '/admin/all-benefeciaries',
+        UPDATE_BENEFECIARY_INFO: '/admin/update-benef',
     },
 
-    async fetchAllBenefApi() {
-        try {
-            const authToken = localStorage.getItem('auth_token');
-            if (!authToken) {
-                throw new Error('No authentication token found');
-            }
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${authToken}`,
-                    'Content-Type': 'application/json'
-                },
-            };
-            const response = await apiClient.get(
-                this.ENDPOINTS.FETCH_ALL_BENEFECIARIES,
-                config
-            );
-
-            if (!response.data) {
-                throw new Error('Invalid response from server');
-            }
-            return response.data;
-        } catch (error) {
-            console.error('[BENEFECIARY_API] Error fetching benefeciaries:', error);
-            const enhancedError = new Error(
-                error.response?.data?.message ||
-                error.message ||
-                'Failed to fetch benefeciaries'
-            );
-            enhancedError.response = error.response;
-            enhancedError.status = error.response?.status;
-            throw enhancedError;
-        }
-    },
-    
+    // Create
     async saveNewBenefApi(benefeciaryData) {
         try {
             const authToken = localStorage.getItem('auth_token');
@@ -76,6 +43,42 @@ export const BENEFECIARY_API = {
         }
     },
 
+    // Read
+    async fetchAllBenefApi() {
+        try {
+            const authToken = localStorage.getItem('auth_token');
+            if (!authToken) {
+                throw new Error('No authentication token found');
+            }
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                    'Content-Type': 'application/json'
+                },
+            };
+            const response = await apiClient.get(
+                this.ENDPOINTS.FETCH_ALL_BENEFECIARIES,
+                config
+            );
+
+            if (!response.data) {
+                throw new Error('Invalid response from server');
+            }
+            return response.data;
+        } catch (error) {
+            console.error('[BENEFECIARY_API] Error fetching benefeciaries:', error);
+            const enhancedError = new Error(
+                error.response?.data?.message ||
+                error.message ||
+                'Failed to fetch benefeciaries'
+            );
+            enhancedError.response = error.response;
+            enhancedError.status = error.response?.status;
+            throw enhancedError;
+        }
+    },
+
+    // Update
     async updateBenefInfoApi(benef) {
         try {
             const authToken = localStorage.getItem('auth_token');
@@ -92,7 +95,7 @@ export const BENEFECIARY_API = {
                 }
             };
             const response = await apiClient.put(
-                `${this.ENDPOINTS.UPDATE_BENEF_INFO}/${benef.benefeciary_id}`,
+                `${this.ENDPOINTS.UPDATE_BENEFECIARY_INFO}/${benef.benefeciary_id}`,
                 benef,
                 config
             );
