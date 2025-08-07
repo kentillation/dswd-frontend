@@ -16,12 +16,12 @@
                 </v-col>
             </v-row>
             <div>
-                <v-btn color="red" variant="tonal" size="small" class="ms-2 pb-7 ps-5 pa-3" prepend-icon="mdi-printer">
+                <!-- <v-btn color="red" variant="tonal" size="small" class="ms-2 pb-7 ps-5 pa-3" prepend-icon="mdi-printer">
                     <span class="to-hide">PDF</span>
                     <span class="to-show"></span>
-                </v-btn>
+                </v-btn> -->
                 <v-btn color="green" variant="tonal" size="small" class="ms-2 pb-7 ps-5 pa-3"
-                    prepend-icon="mdi-download">
+                    prepend-icon="mdi-download" @click="downloadBenefeciaries">
                     <span class="to-hide">XLS</span>
                     <span class="to-show"></span>
                 </v-btn>
@@ -104,7 +104,7 @@
                             </v-col>
                             <v-col cols="12" lg="4" md="4" sm="6" class="pb-0">
                                 <v-text-field v-model="selectedBenef.suffix" label="Suffix"
-                                    :rules="[v => !!v || 'Required']" variant="outlined" placeholder="e.g. II, III, IV, V, Sr., Jr." />
+                                    variant="outlined" placeholder="e.g. II, III, IV, V, Sr., Jr." />
                             </v-col>
                             <v-col cols="12" lg="4" md="4" sm="6" class="pb-0">
                                 <v-autocomplete v-model="selectedBenef.gender_id" label="Gender"
@@ -335,7 +335,6 @@ export default {
                 this.selectedBenef.address_line2 &&
                 this.selectedBenef.address_line3 &&
                 this.selectedBenef.contact_number &&
-                this.selectedBenef.suffix &&
                 this.selectedBenef.gender_id &&
                 this.selectedBenef.bloodtype_id &&
                 this.selectedBenef.category_id
@@ -465,6 +464,49 @@ export default {
                 bloodtype_label: bloodtype?.bloodtype_label,
                 category_label: category?.category_label,
             };
+        },
+
+        async downloadBenefeciaries(){
+            await this.benefeciaryStore.fetchAllBenefStore(this.branchId);
+            if (this.benefeciaryStore.allBenefeciaries.length === 0) {
+                this.showError("No benefeciary available to download.");
+                return;
+            } else {
+                this.loadingStore.show('Downloading benefeciary...');
+            }
+            const allBenefeciaries = this.benefeciaryStore.allBenefeciaries.map(benef => ({
+                'Benefeciary Name': benef.first_name + ' ' + benef.middle_name + ' ' + benef.last_name + ' ' + benef.suffix ?? '',
+                'Age': benef.benef_age,
+                'Gender': benef.gender_label,
+                'Address': benef.address_line1 + ' ' + benef.address_line2  + ' '+ benef.address_line3,
+                'Contact': benef.contact_number,
+                'Blood type': benef.bloodtype_label,
+                'Category': benef.category_label,
+                'Last Update': this.formatDateTime(benef.updated_at),
+            }));
+
+            const headings = [
+                `Name of company: DSWD`,
+                `Location: Sagay City, Negros Island Region`,
+                `Date: ${this.formatCurrentDate}`,
+                `Prepared by : Admin`,
+                '',
+            ].join('\n');
+
+            const csvContent = "data:text/csv;charset=utf-8," 
+                + headings + "\n"
+                + Object.keys(allBenefeciaries[0]).join(",") + "\n"
+                + allBenefeciaries.map(e => Object.values(e).join(",")).join("\n");
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Benefeciary_Report.csv`);
+            document.body.appendChild(link); // Required for FF
+            this.showSuccess("Benefeciary downloaded successfully!");
+            link.click();
+            this.loadingStore.hide();
+            document.body.removeChild(link);
+            // this.$emit('refresh');
         },
 
         formatallBenef(benef) {
